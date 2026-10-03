@@ -1,6 +1,6 @@
 {
   "name": "@ricardogenaro99/scaffolder",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "CLI interactivo para instanciar proyectos desde repositorios plantilla de GitHub (topic: scaffold-template) y para convertir cualquier repo en plantilla.",
   "keywords": [
     "cli",
@@ -26,7 +26,8 @@
   },
   "type": "module",
   "bin": {
-    "scaffold": "./dist/index.js"
+    "scaffold": "./dist/index.js",
+    "scaffolder": "./dist/index.js"
   },
   "files": [
     "dist",
@@ -40,7 +41,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "tsup && chmod +x dist/index.js",
     "dev": "tsup --watch",
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
