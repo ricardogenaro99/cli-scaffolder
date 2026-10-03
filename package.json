@@ -1,0 +1,78 @@
+{
+  "name": "@ricardogenaro99/scaffolder",
+  "version": "1.0.0",
+  "description": "CLI interactivo para instanciar proyectos desde repositorios plantilla de GitHub (topic: scaffold-template) y para convertir cualquier repo en plantilla.",
+  "keywords": [
+    "cli",
+    "scaffold",
+    "scaffolder",
+    "template",
+    "generator",
+    "boilerplate",
+    "github"
+  ],
+  "author": {
+    "name": "Ricardo Genaro",
+    "url": "https://github.com/ricardogenaro99"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/ricardogenaro99/cli-scaffolder#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ricardogenaro99/cli-scaffolder.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ricardogenaro99/cli-scaffolder/issues"
+  },
+  "type": "module",
+  "bin": {
+    "scaffold": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "schemas"
+  ],
+  "engines": {
+    "node": ">=20.12.0"
+  },
+  "packageManager": "pnpm@12.8.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "start": "node dist/index.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "schema:generate": "tsx scripts/generate-schema.ts",
+    "prepare": "pnpm run build",
+    "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.8.1",
+    "boxen": "^9.0.0",
+    "commander": "^15.0.0",
+    "execa": "^10.0.1",
+    "fast-glob": "^3.3.3",
+    "figures": "^6.1.0",
+    "picocolors": "^1.1.1",
+    "tar": "^7.5.22",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.6.4",
+    "@vitest/coverage-v8": "^5.0.3",
+    "eslint": "^10.11.0",
+    "tsup": "^8.5.1",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.0",
+    "vitest": "^5.0.3"
+  }
+}

@@ -1,0 +1,220 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/ricardogenaro99/cli-scaffolder/main/schemas/template.config.schema.json",
+  "title": "Scaffolder Template Configuration Schema",
+  "description": "Contrato de configuración para plantillas compatibles con @ricardogenaro99/scaffolder",
+  "type": "object",
+  "required": [
+    "name",
+    "description"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "URI del esquema JSON de validación"
+    },
+    "version": {
+      "type": "string",
+      "default": "1.0.0",
+      "description": "Versión del esquema de la plantilla"
+    },
+    "schemaVersion": {
+      "type": "number",
+      "description": "Versión numérica del esquema (compatibilidad hacia atrás)"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 80,
+      "description": "Nombre legible de la plantilla"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 300,
+      "description": "Descripción clara del propósito de la plantilla"
+    },
+    "category": {
+      "type": "string",
+      "default": "General",
+      "description": "Categoría organizativa (ej: Backend & Cloud, Frontend, CLI, Microservices)"
+    },
+    "order": {
+      "type": "integer",
+      "default": 99,
+      "description": "Prioridad de ordenamiento visual en menús y listas"
+    },
+    "defaultBranch": {
+      "type": "string",
+      "default": "master",
+      "description": "Rama por defecto para clonar desde GitHub"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Etiquetas tecnológicas para búsqueda y filtrado"
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "node": {
+          "type": "string",
+          "description": "Rango de versión de Node.js (semver)"
+        },
+        "packageManager": {
+          "type": "string",
+          "enum": ["pnpm", "npm", "yarn", "bun"],
+          "description": "Gestor de paquetes preferido"
+        }
+      }
+    },
+    "prompts": {
+      "type": "array",
+      "description": "Preguntas dinámicas a realizar al usuario durante la instanciación",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "message"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Z0-9_]+$",
+            "description": "Identificador de la variable (mayúsculas con guiones bajos)"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["text", "select", "confirm"],
+            "default": "text",
+            "description": "Tipo de control interactivo"
+          },
+          "message": {
+            "type": "string",
+            "description": "Texto del prompt mostrado en la consola"
+          },
+          "default": {
+            "type": ["string", "boolean"],
+            "description": "Valor por defecto si el usuario no ingresa nada"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Opciones disponibles cuando el tipo es 'select'"
+          },
+          "validate": {
+            "type": "string",
+            "description": "Expresión regular para validar la respuesta"
+          }
+        }
+      }
+    },
+    "replacements": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["files", "tokens"],
+          "additionalProperties": false,
+          "properties": {
+            "files": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Lista de globs/archivos donde reemplazar tokens"
+            },
+            "tokens": {
+              "type": "object",
+              "additionalProperties": { "type": "string" },
+              "description": "Mapa de {{TOKEN}} a la clave de prompt correspondiente"
+            }
+          }
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["files", "from", "to"],
+            "additionalProperties": false,
+            "properties": {
+              "files": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "from": { "type": "string" },
+              "to": { "type": "string" },
+              "all": { "type": "boolean" }
+            }
+          }
+        }
+      ]
+    },
+    "envSetup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "copyExample": {
+          "type": "boolean",
+          "default": true
+        },
+        "source": {
+          "type": "string",
+          "default": ".env.example"
+        },
+        "target": {
+          "type": "string",
+          "default": ".env"
+        },
+        "tokens": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        },
+        "set": {
+          "type": "object",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "hooks": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "postScaffold": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Comandos shell a ejecutar tras instanciar la plantilla"
+        }
+      }
+    },
+    "postInstall": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "initGit": {
+          "type": "boolean",
+          "default": true
+        },
+        "initialCommit": {
+          "type": "string",
+          "default": "chore: scaffold project"
+        },
+        "welcomeMessage": {
+          "type": "string"
+        },
+        "nextSteps": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "cleanup": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
