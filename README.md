@@ -1,4 +1,4 @@
-# 🚀 `@ricardogenaro99/scaffolder` (`scaffolder` / `scaffold`)
+# 🚀 `@ricardogenaro99/scaffolder` (`scaffolder`)
 
 > **CLI interactivo con Arquitectura Dinámica, Menú Interactivo, Paleta de Colores Semántica y High-End DX para instanciar proyectos desde plantillas de GitHub y convertir cualquier repositorio en plantilla.**
 
@@ -12,7 +12,7 @@
 
 - **Repositorio en GitHub:** `ricardogenaro99/cli-scaffolder`
 - **Nombre de Paquete en npm:** `@ricardogenaro99/scaffolder`
-- **Comando Binario Principal:** `scaffolder` *(Alias disponible: `scaffold`)*
+- **Comando Binario en Terminal:** `scaffolder`
 
 ### Vías de Ejecución Soportadas:
 1. **Ejecución al vuelo vía `npx` (Recomendado):**
