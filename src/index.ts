@@ -13,7 +13,7 @@ const name = typeof __PKG_NAME__ !== 'undefined' ? __PKG_NAME__ : '@ricardogenar
 const program = new Command();
 
 program
-  .name('scaffold')
+  .name('scaffolder')
   .description('CLI interactivo con arquitectura dinámica y DX de alto nivel para instanciar proyectos desde plantillas de GitHub y configurar repositorios como plantillas.')
   .version(`${name} v${version}`, '-v, --version', 'Muestra la versión actual del CLI');
 
@@ -44,7 +44,7 @@ program
     await runListCommand();
   });
 
-// Manejador por defecto (Invocación sin subcomando directo o atajo scaffold <project-name>)
+// Manejador por defecto (Invocación sin subcomando directo o atajo scaffolder <project-name>)
 program.action(async (options, cmd) => {
   const args: string[] = cmd.args || [];
   
@@ -52,7 +52,7 @@ program.action(async (options, cmd) => {
     // Modo Menú Principal
     await runMainMenu();
   } else {
-    // Modo Directo / Atajo: scaffold <project-name>
+    // Modo Directo / Atajo: scaffolder <project-name>
     const projectName = args[0];
     await runCreateCommand(projectName, options);
   }

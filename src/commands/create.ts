@@ -81,7 +81,7 @@ export async function runCreateCommand(
         renderErrorCard({
           name: 'TemplateNotFoundError',
           message: `No se encontró la plantilla '${rawOptions.template}'.`,
-          suggestion: 'Ejecuta `scaffold list` para ver los IDs de plantillas válidos.',
+          suggestion: 'Ejecuta `scaffolder list` para ver los IDs de plantillas válidos.',
         }),
       );
       return;

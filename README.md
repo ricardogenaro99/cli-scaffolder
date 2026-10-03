@@ -1,4 +1,4 @@
-# 🚀 `@ricardogenaro99/scaffolder` (`scaffold`)
+# 🚀 `@ricardogenaro99/scaffolder` (`scaffolder` / `scaffold`)
 
 > **CLI interactivo con Arquitectura Dinámica, Menú Interactivo, Paleta de Colores Semántica y High-End DX para instanciar proyectos desde plantillas de GitHub y convertir cualquier repositorio en plantilla.**
 
@@ -12,10 +12,10 @@
 
 - **Repositorio en GitHub:** `ricardogenaro99/cli-scaffolder`
 - **Nombre de Paquete en npm:** `@ricardogenaro99/scaffolder`
-- **Comando Binario en Terminal:** `scaffold`
+- **Comando Binario Principal:** `scaffolder` *(Alias disponible: `scaffold`)*
 
 ### Vías de Ejecución Soportadas:
-1. **Ejecución al vuelo vía `npx` (Cuando esté publicado en npm):**
+1. **Ejecución al vuelo vía `npx` (Recomendado):**
    ```bash
    npx @ricardogenaro99/scaffolder [command|project-name] [options]
    ```
@@ -23,7 +23,7 @@
    ```bash
    pnpm add -g @ricardogenaro99/scaffolder
    # o bien: npm install -g @ricardogenaro99/scaffolder
-   scaffold --help
+   scaffolder --help
    ```
 3. **Instalación Global Directa desde GitHub:**
    ```bash
@@ -44,36 +44,36 @@
 
 ## 🎯 2. Tres Modos de Entrada (User Entrypoints)
 
-### Modo 1: Menú Principal Interactivo (`scaffold`)
-Invoca el comando `scaffold` sin argumentos para desplegar un hub interactivo guiado por teclado:
+### Modo 1: Menú Principal Interactivo (`scaffolder`)
+Invoca el comando `scaffolder` sin argumentos para desplegar un hub interactivo guiado por teclado:
 ```bash
-scaffold
+scaffolder
 ```
 - `🚀 Crear nuevo proyecto` → Inicia el selector fuzzy de plantillas y preguntas dinámicas.
 - `⚙️  Configurar repo como template` → Inicia el asistente de creación de `template.config.json`.
 - `📋 Listar templates disponibles` → Muestra tabla de plantillas remotas y locales.
 - `🚪 Salir` → Finaliza la sesión limpiamente.
 
-### Modo 2: Atajo Directo (`scaffold <project-name>`)
+### Modo 2: Atajo Directo (`scaffolder <project-name>`)
 Salta directo al selector de plantillas y preguntas dinámicas para dicho proyecto, omitiendo el menú principal:
 ```bash
-scaffold my-awesome-backend
+scaffolder my-awesome-backend
 ```
 
 ### Modo 3: Subcomandos Explícitos & CI/CD
 - **Instanciación directa:**
   ```bash
-  scaffold create my-service --template ricardogenaro99/aws-cdk-nestjs-archetype-template
+  scaffolder create my-service --template ricardogenaro99/aws-cdk-nestjs-archetype-template
   ```
   - `--dry-run`: Simula la ejecución sin modificar archivos en disco.
   - `--verbose`: Muestra salida detallada y streaming de comandos.
 - **Asistente de autoría:**
   ```bash
-  scaffold init
+  scaffolder init
   ```
 - **Exploración de plantillas:**
   ```bash
-  scaffold list
+  scaffolder list
   ```
 
 ---

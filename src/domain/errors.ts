@@ -25,7 +25,7 @@ export class TemplateNotFoundError extends ScaffolderError {
     super(
       `No se encontró la plantilla '${templateId}'.`,
       'TEMPLATE_NOT_FOUND',
-      'Ejecuta `scaffold list` para explorar las plantillas disponibles.',
+      'Ejecuta `scaffolder list` para explorar las plantillas disponibles.',
     );
   }
 }

@@ -221,7 +221,7 @@ export async function runInitCommand(): Promise<void> {
     `   ${pc.green('gh repo edit --add-topic scaffold-template')}`,
     '',
     `3. ${pc.white('Prueba tu plantilla localmente ejecutando:')}`,
-    `   ${pc.cyan('scaffold create mi-prueba --template local:' + path.basename(currentDir))}`,
+    `   ${pc.cyan('scaffolder create mi-prueba --template local:' + path.basename(currentDir))}`,
   ].join('\n');
 
   console.log(

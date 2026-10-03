@@ -60,5 +60,5 @@ export async function runListCommand(_options: { verbose?: boolean } = {}): Prom
   });
 
   console.log(pc.dim('💡 Para instanciar una plantilla ejecuta:'));
-  console.log(pc.cyan('   scaffold <nombre-proyecto> --template <id>'));
+  console.log(pc.cyan('   scaffolder <nombre-proyecto> --template <id>'));
 }

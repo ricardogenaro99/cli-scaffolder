@@ -44,7 +44,7 @@ O agrégalo manualmente desde la interfaz web de GitHub en la sección **About -
 Puedes probar tu plantilla antes de hacer push o publicarla clonándola en tu directorio de plantillas locales o probándola con `--dry-run`:
 ```bash
 export LOCAL_TEMPLATES_DIR="/ruta/a/tus/plantillas"
-scaffold create mi-prueba --template local:mi-nueva-plantilla --dry-run
+scaffolder create mi-prueba --template local:mi-nueva-plantilla --dry-run
 ```
 
 ---
