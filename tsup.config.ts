@@ -12,7 +12,7 @@ export default defineConfig({
   target: 'node20',
   platform: 'node',
   outDir: 'dist',
-  clean: true,
+  clean: false,
   sourcemap: true,
   minify: false,
   splitting: false,
