@@ -33,6 +33,9 @@ export interface ScaffoldOptions {
   dryRun?: boolean;
   verbose?: boolean;
   targetDir?: string;
+  yes?: boolean;
+  nonInteractive?: boolean;
+  var?: string[];
 }
 
 export interface StepLog {

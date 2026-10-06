@@ -60,11 +60,26 @@ Salta directo al selector de plantillas y preguntas dinámicas para dicho proyec
 scaffolder my-awesome-backend
 ```
 
-### Modo 3: Subcomandos Explícitos & CI/CD
-- **Instanciación directa:**
+### Modo 3: Subcomandos Explícitos & Automatización CI/CD / Headless
+- **Instanciación interactiva directa:**
   ```bash
   scaffolder create my-service --template ricardogenaro99/aws-cdk-nestjs-archetype-template
   ```
+- **Instanciación 100% desatendida / No interactiva (CI/CD, Agentes de IA, Scripts):**
+  ```bash
+  # Usando valores default declarados en template.config.json:
+  scaffolder create billing-service --template ricardogenaro99/aws-cdk-nestjs-archetype-template --yes
+
+  # Sobreescribiendo variables específicas con --var:
+  scaffolder create kinpet-api \
+    --template ricardogenaro99/aws-cdk-nestjs-archetype-template \
+    --yes \
+    --var REPO_ABREV=KINPET \
+    --var STACK_NAME=KinpetApiStack \
+    --var AWS_REGION=us-east-1
+  ```
+  - `-y, --yes` / `--non-interactive`: Omite spinners interactivos y confirmaciones de teclado. Resuelve prompts automáticamente con sus defaults o flags `--var`.
+  - `--var <key=val...>`: Inyecta o sobreescribe variables dinámicas (soporta múltiples `--var` en la misma invocación).
   - `--dry-run`: Simula la ejecución sin modificar archivos en disco.
   - `--verbose`: Muestra salida detallada y streaming de comandos.
 - **Asistente de autoría:**

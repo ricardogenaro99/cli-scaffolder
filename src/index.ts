@@ -1,6 +1,6 @@
 import { Command } from 'commander';
 import { runMainMenu } from './commands/menu.js';
-import { runCreateCommand } from './commands/create.js';
+import { runCreateCommand, type CreateCommandOptions } from './commands/create.js';
 import { runInitCommand } from './commands/init.js';
 import { runListCommand } from './commands/list.js';
 
@@ -24,7 +24,10 @@ program
   .option('-t, --template <id>', 'ID o nombre de la plantilla a instanciar (ej: ricardogenaro99/aws-cdk-nestjs-archetype-template)')
   .option('-d, --dry-run', 'Simula la ejecución sin modificar archivos en disco')
   .option('--verbose', 'Muestra la salida detallada de comandos y descargas')
-  .action(async (name?: string, options?: { template?: string; dryRun?: boolean; verbose?: boolean }) => {
+  .option('-y, --yes', 'Modo no interactivo: usa defaults sin solicitar entradas por teclado')
+  .option('--non-interactive', 'Alias de --yes')
+  .option('--var <keyValuePair...>', 'Inyecta variables clave=valor (ej: --var KEY=VAL)')
+  .action(async (name?: string, options?: CreateCommandOptions) => {
     await runCreateCommand(name, options);
   });
 
