@@ -52,7 +52,10 @@
     "test:coverage": "vitest run --coverage",
     "schema:generate": "tsx scripts/generate-schema.ts",
     "prepare": "pnpm run build",
-    "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build"
+    "prepublishOnly": "pnpm run typecheck && pnpm run test && pnpm run build",
+    "release": "npm publish --access public",
+    "release:patch": "npm version patch && git push && npm publish --access public",
+    "release:minor": "npm version minor && git push && npm publish --access public"
   },
   "dependencies": {
     "@clack/prompts": "^1.8.1",
