@@ -52,6 +52,7 @@ scaffolder
 - `🚀 Crear nuevo proyecto` → Inicia el selector fuzzy de plantillas y preguntas dinámicas.
 - `⚙️  Configurar repo como template` → Inicia el asistente de creación de `template.config.json`.
 - `📋 Listar templates disponibles` → Muestra tabla de plantillas remotas y locales.
+- `🤖 Instalar / Gestionar Skill para Agentes de IA` → Asistente interactivo para configurar el skill para agentes.
 - `🚪 Salir` → Finaliza la sesión limpiamente.
 
 ### Modo 2: Atajo Directo (`scaffolder <project-name>`)
@@ -82,6 +83,20 @@ scaffolder my-awesome-backend
   - `--var <key=val...>`: Inyecta o sobreescribe variables dinámicas (soporta múltiples `--var` en la misma invocación).
   - `--dry-run`: Simula la ejecución sin modificar archivos en disco.
   - `--verbose`: Muestra salida detallada y streaming de comandos.
+- **Gestión de Skill para Agentes de IA:**
+  ```bash
+  # Instalar skill globalmente (~/.agents/skills/scaffolder/SKILL.md):
+  scaffolder skill install --global
+
+  # Instalar skill en el repo actual (.agents/skills/scaffolder/SKILL.md):
+  scaffolder skill install --local
+
+  # Mostrar el contenido íntegro del skill para lectura directa por LLMs:
+  scaffolder skill show
+
+  # Consultar estado de instalación:
+  scaffolder skill status
+  ```
 - **Asistente de autoría:**
   ```bash
   scaffolder init
@@ -165,7 +180,39 @@ Toda plantilla compatible incluye en la raíz el archivo `template.config.json` 
 
 ---
 
-## 🔑 5. Variables de Entorno
+## 🤖 5. Soporte Nativo para Agentes de IA (Agent-Native DX)
+
+`@ricardogenaro99/scaffolder` está diseñado como un **CLI Agent-First**. Incluye un skill oficial (`SKILL.md`) que dota a cualquier agente de IA de conocimiento completo sobre el CLI, la matriz de decisiones para variables y el protocolo de ejecución desatendida.
+
+### Vía A: Instalación Automática mediante el CLI
+1. **Desde el menú interactivo:** Ejecuta `scaffolder` y selecciona `🤖 Instalar / Gestionar Skill para Agentes de IA`. El CLI te preguntará si deseas instalarlo de forma global o local en el proyecto actual.
+2. **Por comando de terminal:**
+   ```bash
+   # Instalación global (Recomendado para todo el sistema):
+   scaffolder skill install --global -y
+
+   # Instalación local (Para compartir dentro de un repositorio monorepo/equipo):
+   scaffolder skill install --local -y
+
+   # Mostrar el contenido para lectura directa de un LLM:
+   scaffolder skill show
+   ```
+
+### Vía B: Configuración Manual desde el Repositorio
+Si prefieres no utilizar el comando del CLI, puedes copiar el archivo fuente que reside en este repositorio:
+* **Archivo fuente SSOT:** [`skills/scaffolder/SKILL.md`](skills/scaffolder/SKILL.md)
+* **Destino Global:** Copia el archivo a `~/.agents/skills/scaffolder/SKILL.md` (o `~/.gemini/skills/` / `~/.claude/skills/`).
+* **Destino Local:** Copia el archivo a `.agents/skills/scaffolder/SKILL.md` en la raíz de tu proyecto.
+
+### Ecosistemas de IA Soportados:
+- **Google DeepMind Antigravity:** Descubrimiento automático en `~/.agents/skills/` y `.gemini/skills/`.
+- **Claude Code (Anthropic):** Reconocimiento inmediato de skills en la bóveda de herramientas.
+- **OpenClaw / Shelbot:** Acceso nativo para orquestación personal y subprocesos.
+- **Cursor & Windsurf:** Lectura de reglas y prompts de arquitectura para scaffolding autónomo.
+
+---
+
+## 🔑 6. Variables de Entorno
 
 - **`GITHUB_TOKEN` / `GH_TOKEN`:** Token de acceso personal de GitHub para evitar límites de tasa (Rate Limit). El CLI también detecta automáticamente tokens activos vía `gh auth token`.
 - **`LOCAL_TEMPLATES_DIR`:** Ruta personalizada para almacenamiento y prueba offline de plantillas locales.

@@ -3,6 +3,7 @@ import pc from 'picocolors';
 import { runCreateCommand } from './create.js';
 import { runInitCommand } from './init.js';
 import { runListCommand } from './list.js';
+import { runSkillCommand } from './skill.js';
 
 export async function runMainMenu(): Promise<void> {
   p.intro(pc.bold(pc.cyan('🚀 bienvenido a CLI Scaffolder (@ricardogenaro99/scaffolder)')));
@@ -26,6 +27,11 @@ export async function runMainMenu(): Promise<void> {
         hint: 'Muestra resumen de plantillas remotas en GitHub y locales',
       },
       {
+        value: 'skill',
+        label: '🤖 Instalar / Gestionar Skill para Agentes de IA',
+        hint: 'Instala o consulta el skill para Antigravity, Claude Code, Cursor, Shelbot, etc.',
+      },
+      {
         value: 'exit',
         label: '🚪 Salir',
         hint: 'Finalizar la sesión',
@@ -44,5 +50,7 @@ export async function runMainMenu(): Promise<void> {
     await runInitCommand();
   } else if (action === 'list') {
     await runListCommand();
+  } else if (action === 'skill') {
+    await runSkillCommand();
   }
 }
