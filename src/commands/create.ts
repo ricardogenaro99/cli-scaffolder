@@ -17,6 +17,7 @@ declare const __PKG_VERSION__: string;
 
 export interface CreateCommandOptions {
   template?: string;
+  scope?: string;
   dryRun?: boolean;
   verbose?: boolean;
   yes?: boolean;
@@ -54,6 +55,7 @@ export interface ResolveAnswersParams {
   projectName: string;
   prompts: PromptDefinition[];
   cliVars?: Record<string, string>;
+  scope?: string;
   isNonInteractive?: boolean;
 }
 
@@ -65,15 +67,41 @@ export async function resolvePromptAnswers(
     askText?: (prompt: PromptDefinition) => Promise<string | symbol>;
   },
 ): Promise<Record<string, string | boolean>> {
-  const { projectName, prompts, cliVars = {}, isNonInteractive = false } = params;
+  const { projectName, prompts, cliVars = {}, scope: optionScope, isNonInteractive = false } = params;
+
+  // Determinar scope corporativo: 1) cliVars.scope, 2) optionScope, o si no se especificó y no hay interactividad
+  let resolvedScope = cliVars.scope ?? cliVars.SCOPE ?? optionScope ?? '';
+  if (resolvedScope && !resolvedScope.startsWith('@')) {
+    resolvedScope = `@${resolvedScope}`;
+  }
 
   const answers: Record<string, string | boolean> = {
     PROJECT_NAME: projectName,
     ...cliVars,
   };
 
+  if (resolvedScope) {
+    answers.scope = resolvedScope;
+    answers.SCOPE = resolvedScope;
+    answers.scopedName = `${resolvedScope}/${projectName}`;
+    answers.SCOPED_NAME = `${resolvedScope}/${projectName}`;
+  }
+
+  // devPort si vino en cliVars
+  if (cliVars.devPort || cliVars.DEV_PORT) {
+    const port = String(cliVars.devPort ?? cliVars.DEV_PORT);
+    answers.devPort = port;
+    answers.DEV_PORT = port;
+  }
+
   for (const promptDef of prompts) {
-    if (promptDef.name === 'PROJECT_NAME' && projectName) {
+    if ((promptDef.name === 'PROJECT_NAME' || promptDef.name === 'projectName') && projectName) {
+      continue;
+    }
+    if ((promptDef.name === 'scope' || promptDef.name === 'SCOPE') && resolvedScope) {
+      continue;
+    }
+    if ((promptDef.name === 'scopedName' || promptDef.name === 'SCOPED_NAME') && answers.scopedName) {
       continue;
     }
 
@@ -308,12 +336,28 @@ export async function runCreateCommand(
 
     const promptsDef = selectedTemplate.config.prompts || [];
 
+    let scopeVal = rawOptions.scope;
+    if (scopeVal === undefined && !isNonInteractive) {
+      const scopeInput = await p.text({
+        message: '¿Cuál es el scope de la organización para el paquete? (Enter para omitir o usar @genaryth)',
+        placeholder: '@genaryth',
+        defaultValue: '',
+      });
+
+      if (p.isCancel(scopeInput)) {
+        p.cancel('Operación cancelada.');
+        return;
+      }
+      scopeVal = (scopeInput as string).trim() || undefined;
+    }
+
     let answers: Record<string, string | boolean>;
     try {
       answers = await resolvePromptAnswers({
         projectName,
         prompts: promptsDef,
         cliVars,
+        scope: scopeVal,
         isNonInteractive,
       });
     } catch (err) {
@@ -327,6 +371,7 @@ export async function runCreateCommand(
     const options: ScaffoldOptions = {
       projectName,
       templateId: selectedTemplate.id,
+      scope: scopeVal,
       dryRun: rawOptions.dryRun,
       verbose: rawOptions.verbose,
       yes: rawOptions.yes,

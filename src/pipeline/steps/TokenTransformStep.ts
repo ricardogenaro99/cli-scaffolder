@@ -10,12 +10,37 @@ export async function executeTokenTransformStep(ctx: PipelineContext): Promise<v
 
   const answers = ctx.answers;
 
+  // Si scope está definido en answers o en options, asegurar formato con arroba (@org)
+  const rawScope = (answers.scope ?? ctx.options.scope ?? '') as string;
+  const scope = rawScope ? (rawScope.startsWith('@') ? rawScope : `@${rawScope}`) : '';
+  const projectName = String(answers.PROJECT_NAME ?? ctx.options.projectName ?? '');
+  const scopedName = scope ? `${scope}/${projectName}` : projectName;
+
+  // Extracción de devPort si existe
+  const devPort = answers.devPort ?? answers.DEV_PORT ?? '';
+
+  const enrichedAnswers: Record<string, string | boolean> = {
+    ...answers,
+    ...(scope ? { scope, SCOPE: scope } : {}),
+    ...(scopedName ? { scopedName, SCOPED_NAME: scopedName } : {}),
+    ...(devPort ? { devPort: String(devPort), DEV_PORT: String(devPort) } : {}),
+  };
+
   const globalTokens: Record<string, string> = {};
-  for (const [key, val] of Object.entries(answers)) {
+  for (const [key, val] of Object.entries(enrichedAnswers)) {
     const strVal = String(val);
     globalTokens[`{{${key}}}`] = strVal;
     globalTokens[`__${key}__`] = strVal;
     globalTokens[`$${key}`] = strVal;
+  }
+
+  // Tokens adicionales explícitos para Handlebars / Mustache
+  if (scope) {
+    globalTokens['{{scope}}'] = scope;
+    globalTokens['{{scopedName}}'] = scopedName;
+  }
+  if (devPort) {
+    globalTokens['{{devPort}}'] = String(devPort);
   }
 
   if (ctx.options.dryRun) {
@@ -89,6 +114,22 @@ export async function executeTokenTransformStep(ctx: PipelineContext): Promise<v
           modified = true;
         }
       }
+
+      // Si es el package.json principal y se especificó un scope explícito,
+      // asegurar que "name" quede como "{{scope}}/{{projectName}}" si no fue ya reemplazado
+      if (relPath === 'package.json' && scope) {
+        try {
+          const pkg = JSON.parse(content);
+          if (pkg.name && !pkg.name.startsWith('@')) {
+            pkg.name = `${scope}/${pkg.name.replace(/^@[^/]+\//, '')}`;
+            content = JSON.stringify(pkg, null, 2) + '\n';
+            modified = true;
+          }
+        } catch {
+          // Si el archivo no es JSON válido (o aún tiene tokens), continuar con reemplazo de texto
+        }
+      }
+
       if (modified) {
         fs.writeFileSync(absPath, content, 'utf8');
       }

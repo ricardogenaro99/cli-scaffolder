@@ -41,8 +41,9 @@ Instancia un nuevo proyecto a partir de una plantilla.
 | Opción | Alias | Descripción |
 | :--- | :--- | :--- |
 | `-t, --template <id>` | | ID o nombre de la plantilla (ej: `ricardogenaro99/aws-cdk-nestjs-archetype-template` o `local:<nombre>`). |
+| `-s, --scope <org>` | | **Enterprise Scope.** Asigna el scope corporativo (ej: `@genaryth`), inyecta `{{scope}}`, `{{scopedName}}` y asegura `"name": "@org/nombre"` en `package.json`. |
 | `-y, --yes` | `--non-interactive` | **Modo Headless / No interactivo.** Suprime spinners interactivos y confirmaciones de teclado. Resuelve prompts automáticamente con `default` o `--var`. |
-| `--var <key=value...>` | | **Inyección de variables.** Repetible. Sobreescribe variables dinámicas requeridas por la plantilla. Máxima prioridad. |
+| `--var <key=value...>` | | **Inyección de variables.** Repetible. Sobreescribe variables dinámicas requeridas por la plantilla (ej. `--var devPort=3001`). Máxima prioridad. |
 | `-d, --dry-run` | | Simula la ejecución sin realizar modificaciones en disco. |
 | `--verbose` | | Salida detallada y streaming de comandos del pipeline. |
 
@@ -77,11 +78,13 @@ Cuando un agente de IA requiera instanciar una plantilla sin consultar interacti
 | Variable | Tipo | Regla de Formato | Convención / Significado | Ejemplo |
 | :--- | :--- | :--- | :--- | :--- |
 | **`PROJECT_NAME`** | `text` | `^[a-z0-9-]+$` | Prefijo del producto/servicio en `kebab-case`. | `kinpet-api`, `billing-service` |
+| **`scope`** | `text` | `^@[a-z0-9-]+$` | Scope corporativo de la organización para paquetes npm/monorepos. Por defecto `@genaryth`. | `@genaryth` |
 | **`PROJECT_DESCRIPTION`** | `text` | Texto formal | Propósito + Stack + Organización. | `Backend API e infraestructura con NestJS y AWS CDK para Kinpet (Genaryth)` |
 | **`REPO_ABREV`** | `text` | `^[A-Z0-9_]+$` | 3 a 10 letras en MAYÚSCULAS sin guiones. Usado para rutas de SSM (`/<ABREV>/<STAGE>/`) y tags de CloudFormation. | `KINPET`, `BILLING` |
 | **`STACK_NAME`** | `text` | `PascalCase` | Nombre del stack raíz en AWS CloudFormation. | `KinpetApiStack`, `BillingStack` |
 | **`OWNER`** | `text` | Texto | Nombre de usuario o entidad responsable. | `ricardogenaro99` |
 | **`AWS_REGION`** | `select` | Cadena | Región de despliegue en AWS (por defecto `us-east-1`). | `us-east-1` |
+| **`devPort`** | `text` | `^[0-9]{4,5}$` | Puerto de desarrollo local para evitar colisiones: `3000` (Frontend principal), `3001` (Backend API), `3002` (Frontend secundario/Hub). | `3001`, `3002` |
 
 ---
 
@@ -97,10 +100,12 @@ El CLI implementa modo desatendido nativo con resolución estricta de precedenci
 ```bash
 scaffolder create billing-service \
   --template ricardogenaro99/aws-cdk-nestjs-archetype-template \
+  --scope @genaryth \
   --yes \
   --var REPO_ABREV=BILLING \
   --var STACK_NAME=BillingServiceStack \
-  --var AWS_REGION=us-east-1
+  --var AWS_REGION=us-east-1 \
+  --var devPort=3001
 ```
 
 ### Caso 2: Instanciación Dentro de un Monorepo Existente (ej. en `apps/api`)

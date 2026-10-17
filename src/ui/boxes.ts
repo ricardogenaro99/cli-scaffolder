@@ -13,6 +13,7 @@ export function renderPreflightSummary(
     '',
     `${pc.dim('Plantilla:')}     ${pc.magenta(template.name)} ${pc.dim(`(${template.id})`)}`,
     `${pc.dim('Proyecto:')}      ${pc.bold(pc.green(options.projectName))}`,
+    ...(options.scope ? [`${pc.dim('Scope Org:')}      ${pc.bold(pc.cyan(options.scope.startsWith('@') ? options.scope : `@${options.scope}`))}`] : []),
     `${pc.dim('Destino:')}       ${pc.dim(options.targetDir ?? `./${options.projectName}`)}`,
   ];
 

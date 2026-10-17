@@ -29,6 +29,7 @@ export interface TemplateDiscoveryResult {
 export interface ScaffoldOptions {
   projectName: string;
   templateId?: string;
+  scope?: string;
   answers?: Record<string, string | boolean>;
   dryRun?: boolean;
   verbose?: boolean;

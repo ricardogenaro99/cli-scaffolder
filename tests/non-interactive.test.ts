@@ -269,6 +269,24 @@ describe('Modo No Interactivo (--yes, --non-interactive) e Inyección de Variabl
       expect(stdout).toContain('FROM_CLI');
     });
 
+    it('debe propagar el flag --scope en CLI y mostrarlo en el preflight summary en modo headless', () => {
+      const binPath = path.resolve(process.cwd(), 'dist/index.js');
+
+      const cmd = `node "${binPath}" create scoped-app --template "local:demo-archetype" --scope "@genaryth" --yes --var CUSTOM_VAR=SCOPED_VAL --dry-run`;
+      
+      const stdout = execSync(cmd, {
+        env: {
+          ...process.env,
+          LOCAL_TEMPLATES_DIR: templatesDir,
+        },
+        encoding: 'utf8',
+      });
+
+      expect(stdout).toContain('Simulación completada sin modificaciones en disco');
+      expect(stdout).toContain('@genaryth');
+      expect(stdout).toContain('SCOPED_VAL');
+    });
+
     it('debe fallar con código de salida 1 en CLI si falta una variable requerida en modo --yes', () => {
       const binPath = path.resolve(process.cwd(), 'dist/index.js');
 

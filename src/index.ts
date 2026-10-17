@@ -23,6 +23,7 @@ program
   .command('create [name]')
   .description('Instancia un nuevo proyecto a partir de una plantilla')
   .option('-t, --template <id>', 'ID o nombre de la plantilla a instanciar (ej: ricardogenaro99/aws-cdk-nestjs-archetype-template)')
+  .option('-s, --scope <org>', 'Scope de la organización para el paquete (ej: @genaryth)')
   .option('-d, --dry-run', 'Simula la ejecución sin modificar archivos en disco')
   .option('--verbose', 'Muestra la salida detallada de comandos y descargas')
   .option('-y, --yes', 'Modo no interactivo: usa defaults sin solicitar entradas por teclado')

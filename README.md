@@ -77,12 +77,35 @@ scaffolder my-awesome-backend
     --yes \
     --var REPO_ABREV=KINPET \
     --var STACK_NAME=KinpetApiStack \
-    --var AWS_REGION=us-east-1
+- **Instanciación con Enterprise Scoping & Segregación de Puertos:**
+  ```bash
+  scaffolder create billing-service \
+    --template ricardogenaro99/aws-cdk-nestjs-archetype-template \
+    --scope @genaryth \
+    --yes \
+    --var REPO_ABREV=BILLING \
+    --var STACK_NAME=BillingServiceStack \
+    --var AWS_REGION=us-east-1 \
+    --var devPort=3001
   ```
+  - `-s, --scope <org>`: Define el scope corporativo de la organización (ej: `@genaryth`). Inyecta automáticamente `{{scope}}`, `{{scopedName}}` y asegura `"name": "@org/nombre"` en `package.json`.
   - `-y, --yes` / `--non-interactive`: Omite spinners interactivos y confirmaciones de teclado. Resuelve prompts automáticamente con sus defaults o flags `--var`.
-  - `--var <key=val...>`: Inyecta o sobreescribe variables dinámicas (soporta múltiples `--var` en la misma invocación).
+  - `--var <key=val...>`: Inyecta o sobreescribe variables dinámicas (soporta múltiples `--var` en la misma invocación, como `--var devPort=3001`).
   - `--dry-run`: Simula la ejecución sin modificar archivos en disco.
   - `--verbose`: Muestra salida detallada y streaming de comandos.
+
+### 🏢 Convenciones de Enterprise Scoping y Puertos (Estándar Genaryth)
+
+Para mantener aislamiento estricto y evitar colisiones en desarrollo local y monorepos:
+* **Scope Corporativo (`--scope @genaryth`):**
+  * Asegura que todo paquete y microservicio tenga nomenclatura estándar en `package.json`:
+    `"name": "@genaryth/billing-service"`
+  * Expone los tokens `{{scope}}` (`@genaryth`) y `{{scopedName}}` (`@genaryth/billing-service`) listos para plantillas Handlebars/Mustache.
+* **Segregación de Puertos de Desarrollo (`devPort`):**
+  * **`3000`**: Frontend Web Principal (App/Portal)
+  * **`3001`**: Backend Microservicio / API REST / NestJS (`PORT=3001`)
+  * **`3002`**: Frontend Secundario / Admin Hub / Backoffice (`next dev -p 3002`)
+  * Se inyecta en scripts de `package.json` (`"dev": "next dev -p {{devPort}}"`) o archivos `.env` (`PORT={{devPort}}`).
 - **Gestión de Skill para Agentes de IA:**
   ```bash
   # Instalar skill globalmente (~/.agents/skills/scaffolder/SKILL.md):
